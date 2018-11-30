@@ -32,21 +32,27 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     console.log("Home Component has been initalized.");
 
-    this.allBlogs = this.getAllBlogs();
+    this.allBlogs = await this.getAllBlogs();
+    console.log(this.allBlogs);
+    console.log("I waited like a good boy!")
+    this.isLoaded = true;
+    console.log("I waited like a good boy!")
   }
 
-  getAllBlogs(){
-    this.BlogHttpService.requestApiData().subscribe(
-      async data =>{
+  async getAllBlogs(){
+    console.log("hah, gay!")
+    let tempallBlogs;
 
-        this.allBlogs = await data["data"];
-        this.isLoaded = true;
-      }
-    )
+    await this.BlogHttpService.requestApiData().toPromise().then( data => {
+      tempallBlogs = data['data'];
+    })
+
+    return tempallBlogs;
   }
+  
   ngOnDestroy(){
 
   }

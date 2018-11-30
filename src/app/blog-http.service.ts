@@ -15,35 +15,37 @@ import 'rxjs/add/operator/do';
 })
 
 export class BlogHttpService {
-  private json_tempCache = [];
-  private json_currentDetal = {};
-  private json_timeMinimum = 5000*60*5;
+  // private json_tempCache = [];
+  // private json_currentDetal = {};
+  // private json_timeMinimum = 5000*60*5;
 
   public  url_currentDetail = `all`;
   private url_baseURL = `https://blogapp.edwisor.com/api/v1/blogs/`;
-  private url_baseToken:string = ``;
+  private url_baseToken:string = `?authToken=NGExNzdiYjhjNDIzZmM4NmM0N2YzZWI0YWY3ZThlNDAyMjNjNTVjZDg0M2QxNjI5ZDU4OGU2ODc3ZDRjZDUwZmJmNGM1MDFkMGE2MGVlNDExMzcyODBiNTZhMjNiNzFhMjUzYjY3MjQ4M2Y2MDU3ZWZlODIzOTdjYzdhZThkYjE3YQ==`;
+  public fakePromise = false;
   
   constructor(private _http:HttpClient, private _route: ActivatedRoute, private router: Router) { 
 
     //this is used to dynamicly change the send requests sent to the API by changing the "currentDetail".
     this.router.events.forEach((event) => {
-      if(event instanceof NavigationStart) {
+      if(event instanceof NavigationEnd) {
         
         let currentPage = this.router.url.split("/")[1];
+        this.constructorLog(currentPage);
 
-        if(currentPage === `home`){
+        if(currentPage === `home`){ this.constructorLog("home!");
           this.url_currentDetail = `all`;
         }
-        else if(currentPage === `about` || currentPage === `create`){
+        else if(currentPage === `about` || currentPage === `create`){ this.constructorLog("About or Create!");;
           //pass
         }
-        else if(currentPage === `blog`){
+        else if(currentPage === `blog`){this.constructorLog("Blog View!");
+          
+        }
+        else if(currentPage === `edit`){ this.constructorLog("Edit!");
 
         }
-        else if(currentPage === `edit`){
-
-        }
-        else {
+        else {this.constructorLog("Not Found?");
           this.router.navigate(['**']);
         }
 
@@ -52,19 +54,83 @@ export class BlogHttpService {
 
   }
 
-  //Method to format errors for the requestApiData() command.
-  private formatErrors(error: any) {
+  //Method to throw errors for the requestApiData() command.
+  private errorApiData(error: any) {
     return Observable.throw(error.json());
   }
   
   //Requests a json from the API using the api url, "currentDetail", and token. 
   public requestApiData(): Observable<any> {
-    return this._http.get(`${this.url_baseURL}${this.url_currentDetail}${this.url_baseToken}`)
+    console.log("Doin' up the house!")
+
+    return this._http
+      .get(`${this.url_baseURL}${this.url_currentDetail}${this.url_baseToken}`)
+      .catch(this.errorApiData);
+
+      
+
+  }
+
+  private constructorLog(myLog){
+    console.log(myLog);
+  }
+
+  public async constructorBlogFunction(){
+              
+    if(this.router.url.split("/").length > 2){this.constructorLog("Blog has a ID!");
+
+    let temp_json;
+    let blogId = this.router.url.split("/")[2];
+    let isAMatch:boolean = false;
+
+    this.constructorLog("Blog's ID is...");
+    this.constructorLog(blogId);
+    this.constructorLog("Let's see if We can find that blog!");
+    this.url_currentDetail = `all`
+
+    this.constructorLog("Subscribing to the Api Data Req!");
+        
+    await this.requestApiData().toPromise().then( data => {
+
+      this.constructorLog("getting data!")
+      temp_json = data['data'];
+      this.constructorLog("got data!")
+      this.constructorLog(temp_json);
+      
+    })
+    
+    this.constructorLog("Started a for-loop, baby!");
+    for(let blog of temp_json){
+      this.constructorLog("is it this blog?");
+      this.constructorLog(blog);
+      this.constructorLog(blogId);
+      this.constructorLog(blog.blogId)
+      if(blog.blogId === blogId){this.constructorLog("Match success!")
+        this.url_currentDetail = `view/${blogId}`
+        this.constructorLog(this.url_currentDetail)
+        isAMatch = true;
+
+        break;
+      }
+    }
+
+    if(isAMatch !== true){
+      this.router.navigate(['**']);
+    }
+    
+
+  }
+  else{this.constructorLog("Blog has no ID....");
+    this.router.navigate(['**']);
+  }
+
   }
 
 
 
 
+  //The following is depricated code imported from the pokedex-demo project.
+  //After realizing that the blog-demo project didn't need all of these functions since it's so simple it was better to just comment them out and save them for later projects/updates.
 
   //Writes the json data to a var. 
   /*private writeApiData(){
