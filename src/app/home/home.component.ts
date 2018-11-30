@@ -37,21 +37,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     console.log("Setting allBlogs (home)");
 
-    this.allBlogs = this.BlogHttpService.returnApiData().subscribe(
-      async data =>{
-        console.log("Logging getAllBlogs() data...");
-        console.log(data);
+    this.allBlogs = this.BlogHttpService.getApiData();
 
-        console.log("Logging allBlogs...");
-        this.allBlogs = await data["data"];
-        this.isLoaded = true;
-        console.log(this.allBlogs);
-      }
-    )
-
-    console.log("Battin' a ", this.allBlogs);
-
-    console.log("I waited like a good boy!")
+    console.log('I waited like a good boy!')
 
 
 
