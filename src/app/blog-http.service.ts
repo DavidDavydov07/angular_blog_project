@@ -21,7 +21,7 @@ export class BlogHttpService {
 
   public  url_currentDetail = `all`;
   private url_baseURL = `https://blogapp.edwisor.com/api/v1/blogs/`;
-  private url_baseToken:string = `?authToken=YmEzNjIyZWUyNDY3MjZkYTI4MTg4MzUwZjVjNmMwZjBiOWZkNDc2YjA2ZTM0ZDBkZGI4NmVlZDczMWFjYTFjZDFhZmI1NzQxM2NkN2Y2YTVhMzg0MTJkODQzNjY0Zjc2MWYwNDMwMzE3MDZhOWQ1YjI4Mjc4Zjg1YzE0YzQ0OTBhNQ==`;
+  private url_baseToken:string = ``;
   
   constructor(private _http:HttpClient, private _route: ActivatedRoute, private router: Router) { 
 
@@ -65,7 +65,7 @@ export class BlogHttpService {
 
 
 
-  
+
   //Writes the json data to a var. 
   /*private writeApiData(){
     let tempData;
