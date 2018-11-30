@@ -62,8 +62,12 @@ export class BlogHttpService {
     return this._http.get(`${this.url_baseURL}${this.url_currentDetail}${this.url_baseToken}`)
   }
 
+
+
+
+  
   //Writes the json data to a var. 
-  private writeApiData(){
+  /*private writeApiData(){
     let tempData;
 
     this.requestApiData().subscribe(
@@ -116,6 +120,6 @@ export class BlogHttpService {
 
       return temp_json_currentDetail;
     }
-  }
+  }*/
 
 }

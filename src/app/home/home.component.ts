@@ -35,54 +35,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log("Home Component has been initalized.");
 
-    console.log("Setting allBlogs (home)");
-
-    this.allBlogs = this.BlogHttpService.getApiData();
-
-    console.log('I waited like a good boy!')
-
-
-
+    this.allBlogs = this.getAllBlogs();
   }
 
+  getAllBlogs(){
+    this.BlogHttpService.requestApiData().subscribe(
+      async data =>{
 
-
-
-
-  /*private setHeaders(): HttpHeaders {
-    const headersConfig = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-    if (this.jwtService.getToken()) {
-      headersConfig['Authorization'] = this.jwtService.getToken();
-    }
-    return new HttpHeaders(headersConfig);
-  }*/
-
-
-
-  /*async getAllBlogs(): Promise<any> {
-    console.log("getAllBlogs has been called.");
-
-    try {
-      let response = await this._http
-        .get(this.BlogHttpService.baseURL + 'all' + this.BlogHttpService.token)
-        .toPromise()
-        .then(this.extractData)
-      return response;
-
-    } catch (error) {
-      await console.log('ERROR:', error);
-    }
-    
+        this.allBlogs = await data["data"];
+        this.isLoaded = true;
+      }
+    )
   }
-
-  private extractData(res: Response) {
-    let body = Response.json();
-    return body || {};
-  }*/
-  
   ngOnDestroy(){
 
   }
