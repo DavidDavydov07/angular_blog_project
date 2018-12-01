@@ -6,7 +6,7 @@
     <div class="row" style="text-align:center" *ngIf="allBlogs.length > 0">
       <div *ngFor="let blog of allBlogs" class="col-md-4">
         
-        <div class="card">
+        <div class="card" style="margin-bottom: 2.4rem;">
             <div class="card-body">
               <h4 class="card-title">{{blog.title | uppercase}}</h4>
               <h6 class="card-subtitle mb-2 text-muted">Posted on {{blog.created | date}} by {{blog.author}}</h6>
@@ -14,8 +14,6 @@
               <a [routerLink]="['/blog',blog.blogId]" class="card-link">Read</a>
             </div>
           </div>
-
-        <br/>
       </div>
 
     </div>
