@@ -7,14 +7,9 @@ import { Http, Response, Headers, RequestOptions, URLSearchParams } from '@angul
 import 'rxjs/add/operator/toPromise';
 
 //temp imports
-import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-// this is a decorator
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,28 +17,27 @@ import 'rxjs/add/operator/catch';
 })
 
 
-// a simple class using lifecycle hooks.
 export class HomeComponent implements OnInit, OnDestroy {
 
-  public allBlogs:any;
-  public isLoaded = false;
+  public allBlogs:object;
+  public isLoaded:boolean;
+
   //dummy blog var is allBlogs
   constructor(private BlogHttpService:BlogHttpService, private _http:HttpClient) { 
 
   }
 
   async ngOnInit() {
-    console.log("Home Component has been initalized.");
-
+    /*Set isLoaded to false so that this component's templating doesn't
+    active prematurely before the data is called.*/ 
+    this.isLoaded = false;
+    
+    //Get all of the blogs and then set isLoaded to true.
     this.allBlogs = await this.getAllBlogs();
-    console.log(this.allBlogs);
-    console.log("I waited like a good boy!")
     this.isLoaded = true;
-    console.log("I waited like a good boy!")
   }
 
   async getAllBlogs(){
-    console.log("hah, gay!")
     let tempallBlogs;
 
     await this.BlogHttpService.requestApiData().toPromise().then( data => {

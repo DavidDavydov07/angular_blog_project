@@ -11,8 +11,8 @@ import { BlogHttpService } from '../blog-http.service';
 
 
 export class BlogViewComponent implements OnInit, OnDestroy {
-  public currentBlog;
-  public isLoaded=false;
+  public currentBlog:object;
+  public isLoaded:boolean;
 
   constructor(private _route: ActivatedRoute, private router: Router, private BlogHttpService:BlogHttpService) {
     console.log("constructor is called");
@@ -20,30 +20,30 @@ export class BlogViewComponent implements OnInit, OnDestroy {
    }
 
   async ngOnInit() {
+    /*Set isLoaded to false so that this component's templating doesn't
+    active prematurely before the data is called.
+    
+    This isn't a problem on the first component call but happens durring
+    subsequent calls.*/ 
     this.isLoaded = false;
-    console.log("ngOnInit is called")
-    console.log("when a couple of guys who are up to no good,");
+
     //getting the blog id from the route.
     await this.BlogHttpService.constructorBlogFunction();
+    
+    //Get the blog in question and then set isLoaded to true.
     this.currentBlog = await this.getCurrentBlog();
-    console.log("Got in one little fight and my mom got scared!")
     this.isLoaded = true;
-    /*if(this.BlogHttpService.allBlogs === undefined || this.BlogHttpService.allBlogs.length === 0){
-      this.BlogHttpService.setAllBlogs();
-    }
-
-    this.currentBlog = this.BlogHttpService.getSingleBlogInformation(myBlogId);
-    console.log("hihihihi" + this.currentBlog);*/
   }
 
+
+  /*Function gets and returns the current blog's data after the 
+  BlogHttpService's constructorBlogFunction() method is called.*/
   async getCurrentBlog(){
-    console.log("started making trouble in my neighborhood")
     let tempCurrentBlog;
 
     await this.BlogHttpService.requestApiData().toPromise().then( data => {
       tempCurrentBlog = data['data'];
     })
-    console.log("Dududula-dududula-durururu!", tempCurrentBlog);
 
     return await tempCurrentBlog;
   }

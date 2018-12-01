@@ -33,22 +33,22 @@ export class BlogHttpService {
         let currentPage = this.router.url.split("/")[1];
         this.constructorLog(currentPage);
 
-        if(currentPage === `home`){ this.constructorLog("home!");
+        if(currentPage === `home`){
           this.url_currentDetail = `all`;
         }
-        else if(currentPage === `about` || currentPage === `create`){ this.constructorLog("About or Create!");;
-          //pass
+        else if(currentPage === `blog`){
+          //This is taken care of by the blog-view component.
+          //This exists for completeness. Please don't remove it.
         }
-        else if(currentPage === `blog`){this.constructorLog("Blog View!");
-          
+        else if(currentPage === `edit`){
+          //This exists for completeness. Please don't remove it.
         }
-        else if(currentPage === `edit`){ this.constructorLog("Edit!");
-
+        else if(currentPage === `about` || currentPage === `create`){
+          //This exists for completeness. Please don't remove it.
         }
-        else {this.constructorLog("Not Found?");
+        else {
           this.router.navigate(['**']);
         }
-
       }
     });
 
@@ -58,134 +58,73 @@ export class BlogHttpService {
   private errorApiData(error: any) {
     return Observable.throw(error.json());
   }
-  
-  //Requests a json from the API using the api url, "currentDetail", and token. 
-  public requestApiData(): Observable<any> {
-    console.log("Doin' up the house!")
 
-    return this._http
-      .get(`${this.url_baseURL}${this.url_currentDetail}${this.url_baseToken}`)
-      .catch(this.errorApiData);
-
-      
-
-  }
-
+  //This is a meathod used to call console.log() from the constructor. 
   private constructorLog(myLog){
     console.log(myLog);
   }
+  
 
+  //Requests a json from the API using the api url, "currentDetail", and token. 
+  public requestApiData(): Observable<any> {
+
+    //Get's a responce from the api, use the errorApiData function if needed.
+    return this._http
+      .get(`${this.url_baseURL}${this.url_currentDetail}${this.url_baseToken}`)
+      .catch(this.errorApiData);
+  }
+
+  
+  //Method deals with finding the correct blog for the blog-view component.
+  //At the time of writing this is only called inside said component.
   public async constructorBlogFunction(){
-              
-    if(this.router.url.split("/").length > 2){this.constructorLog("Blog has a ID!");
-
-    let temp_json;
-    let blogId = this.router.url.split("/")[2];
-    let isAMatch:boolean = false;
-
-    this.constructorLog("Blog's ID is...");
-    this.constructorLog(blogId);
-    this.constructorLog("Let's see if We can find that blog!");
-    this.url_currentDetail = `all`
-
-    this.constructorLog("Subscribing to the Api Data Req!");
-        
-    await this.requestApiData().toPromise().then( data => {
-
-      this.constructorLog("getting data!")
-      temp_json = data['data'];
-      this.constructorLog("got data!")
-      this.constructorLog(temp_json);
-      
-    })
     
-    this.constructorLog("Started a for-loop, baby!");
-    for(let blog of temp_json){
-      this.constructorLog("is it this blog?");
-      this.constructorLog(blog);
-      this.constructorLog(blogId);
-      this.constructorLog(blog.blogId)
-      if(blog.blogId === blogId){this.constructorLog("Match success!")
-        this.url_currentDetail = `view/${blogId}`
-        this.constructorLog(this.url_currentDetail)
-        isAMatch = true;
+    //Only run all of this if there's something proceeding the blog (hopefully a blogID.)
+    if(this.router.url.split("/").length > 2){
 
-        break;
+      let temp_json;
+      let blogId = this.router.url.split("/")[2];
+      let isAMatch:boolean = false;
+
+      //Set the currentDetail to all so that we can get a list of all the blogs. 
+      this.url_currentDetail = `all`
+        
+      //Get a list of all the blogs from the requestApiData function.
+      await this.requestApiData().toPromise().then( data => {
+
+        //Put the data in our temperary json var. 
+        temp_json = data['data'];      
+      })
+      
+      //Run through all the "blogs" in the temp-JSON variable .
+      for(let blog of temp_json){
+
+        /*If the blogID proceeding the blog url file path matches 
+        the blogID of a actual blog, set the current detail to call that
+        specific blog from the API. 
+        
+        Also sets isAMatch to true and breaks the for loop.*/ 
+        if(blog.blogId === blogId){this.constructorLog("Match success!")
+          //Set the currentDetail to view/:BlogId.
+          this.url_currentDetail = `view/${blogId}`
+
+          //Set isAMatch to true so that the if statement below can redirect the user is no such blog exists.
+          isAMatch = true;
+
+          break;
+        }
+      }
+
+      //If isAMatch was never set to true, redirect the user to the Not Found page.
+      if(isAMatch !== true){
+        this.router.navigate(['**']);
       }
     }
 
-    if(isAMatch !== true){
+    //If this blog has nothing proceding the "blog" route redirect to not found since the blog-view component isn't functional without a blogID.
+    else{ 
       this.router.navigate(['**']);
     }
-    
-
   }
-  else{this.constructorLog("Blog has no ID....");
-    this.router.navigate(['**']);
-  }
-
-  }
-
-
-
-
-  //The following is depricated code imported from the pokedex-demo project.
-  //After realizing that the blog-demo project didn't need all of these functions since it's so simple it was better to just comment them out and save them for later projects/updates.
-
-  //Writes the json data to a var. 
-  /*private writeApiData(){
-    let tempData;
-
-    this.requestApiData().subscribe(
-      async data =>{
-        console.log("Logging getAllBlogs() data...");
-        console.log(data);
-
-        console.log("Logging allBlogs...");
-        tempData = await data["data"];
-        console.log(tempData);
-      }
-    )
-    
-    return tempData;
-  }
-
-  //Itterates through the "json_tempCache" to see if the json was requested already. 
-  //If it was requested before the "json_timeMinimum" has passed used a json stored in the cache instead. 
-  public getApiData():any {
-    let sortApiData_timeCurrent:number = new Date().getTime();
-    console.log("Hey!");
-
-    if(this.json_tempCache.length > 0){
-      for(let requestsMade of this.json_tempCache){
-        
-        if(requestsMade.cached_url_currentDetail === this.url_currentDetail && Math.abs(requestsMade.cached_timeRequestWasMade - sortApiData_timeCurrent) > this.json_timeMinimum){
-          
-          requestsMade.cached_json_currentDetail = this.writeApiData();
-          requestsMade.timeRequestWasMade = sortApiData_timeCurrent;
-
-          return requestsMade.cached_json_currentDetail;
-        }
-        
-        
-        else if(requestsMade.cached_url_currentDetail === this.url_currentDetail){
-          
-          return requestsMade.cached_json_currentDetail;
-        }
-      }
-    }
-
-    else{
-      let temp_json_currentDetail = this.writeApiData();
-
-      this.json_tempCache.push({
-        'cached_url_currentDetail': this.url_currentDetail,
-        'cached_json_currentDetail': temp_json_currentDetail,
-        'cached_timeRequestWasMade': sortApiData_timeCurrent
-      })
-
-      return temp_json_currentDetail;
-    }
-  }*/
 
 }
