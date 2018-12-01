@@ -11,7 +11,6 @@ import { BlogCreateComponent } from './blog-create/blog-create.component';
 import { BlogEditComponent } from './blog-edit/blog-edit.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { BlogAboutComponent } from './blog-about/blog-about.component';
-import { BlogService } from './blog.service';
 import { BlogHttpService } from './blog-http.service';
 
 
@@ -45,7 +44,7 @@ import { BlogHttpService } from './blog-http.service';
     ])
 
   ],
-  providers: [BlogService, BlogHttpService],
+  providers: [BlogHttpService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

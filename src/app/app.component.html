@@ -16,7 +16,14 @@
       </ul>
     </div>
   </nav>
+</div>
 
+<!--<ol class="breadcrumb" id="BreadcrumbBar">
+  <li class="breadcrumb-item active"><a href="#">Dummy Cumb (If you can see this there's an error in the blog-http service!)</a></li>
+</ol>-->
+
+<div class="progress" id="ProgressBar" hidden>
+    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" [style.width.%]="loadBarProgress"></div>
 </div>
 
 <router-outlet></router-outlet>

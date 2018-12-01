@@ -9,6 +9,10 @@ import { ActivatedRoute, Router, NavigationStart, NavigationEnd, NavigationError
 import { Observable } from "rxjs/observable"
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
+import { AppComponent } from './app.component';
+
+//Jquery
+declare var $: any;
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +26,10 @@ export class BlogHttpService {
   public  url_currentDetail = `all`;
   private url_baseURL = `https://blogapp.edwisor.com/api/v1/blogs/`;
   private url_baseToken:string = `?authToken=NGExNzdiYjhjNDIzZmM4NmM0N2YzZWI0YWY3ZThlNDAyMjNjNTVjZDg0M2QxNjI5ZDU4OGU2ODc3ZDRjZDUwZmJmNGM1MDFkMGE2MGVlNDExMzcyODBiNTZhMjNiNzFhMjUzYjY3MjQ4M2Y2MDU3ZWZlODIzOTdjYzdhZThkYjE3YQ==`;
-  public fakePromise = false;
   
+  public currentLoadingPercent = 0;
+  //public currentBreadCrumbs = [];
+
   constructor(private _http:HttpClient, private _route: ActivatedRoute, private router: Router) { 
 
     //this is used to dynamicly change the send requests sent to the API by changing the "currentDetail".
@@ -31,20 +37,32 @@ export class BlogHttpService {
       if(event instanceof NavigationEnd) {
         
         let currentPage = this.router.url.split("/")[1];
-        this.constructorLog(currentPage);
+        //this.currentBreadCrumbs = [];
 
         if(currentPage === `home`){
+
           this.url_currentDetail = `all`;
+          
+          $('#ProgressBar').attr("hidden", false);
+          //this.currentBreadCrumbs.push(`<li class="breadcrumb-item active"><a>Home</a></li>`);
+          //this.setCrumbs();
         }
         else if(currentPage === `blog`){
-          //This is taken care of by the blog-view component.
+          
+          //this.currentBreadCrumbs.push(`<li class="breadcrumb-item"><a href="/home">Home</a></li>`);
+          //this.currentBreadCrumbs.push(`<li class="breadcrumb-item active"><a>${this.router.url.split("/")[2]}</a></li>`);
+          //this.setCrumbs();
+        }
+        else if(currentPage === `create`){
           //This exists for completeness. Please don't remove it.
         }
         else if(currentPage === `edit`){
           //This exists for completeness. Please don't remove it.
         }
-        else if(currentPage === `about` || currentPage === `create`){
-          //This exists for completeness. Please don't remove it.
+        else if(currentPage === `about`){
+          //this.currentBreadCrumbs.push(`<li class="breadcrumb-item"><a href="/home"Home</a></li>`);
+          //this.currentBreadCrumbs.push(`<li class="breadcrumb-item active"><a>About</a></li>`);
+          //this.setCrumbs();
         }
         else {
           this.router.navigate(['**']);
@@ -63,6 +81,15 @@ export class BlogHttpService {
   private constructorLog(myLog){
     console.log(myLog);
   }
+
+  //Breadcrumbs changer. 
+  /*public setCrumbs(){
+    $("#BreadcrumbBar").empty();
+
+    for(let Crumb in this.currentBreadCrumbs){
+      $("#BreadcrumbBar").append(this.currentBreadCrumbs[Crumb]);
+    }
+  }*/
   
 
   //Requests a json from the API using the api url, "currentDetail", and token. 
