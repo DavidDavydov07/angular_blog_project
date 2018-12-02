@@ -12,4 +12,8 @@ export class BlogCreateComponent implements OnInit {
   ngOnInit() {
   }
 
+  createBlog(){
+    
+  }
+
 }
