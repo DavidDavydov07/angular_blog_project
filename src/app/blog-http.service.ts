@@ -99,6 +99,14 @@ export class BlogHttpService {
     return myResponse;
   }
 
+  public editBlog(blogData, blogId):any{
+    let myResponse = this._http
+      .put(`${this.url_baseURL}${blogId}/edit${this.url_baseToken}`, blogData);
+
+      console.log(`${this.url_baseURL}${blogId}/edit${this.url_baseToken}`)
+    return myResponse;
+  }
+
   public deleteBlog(blogId):any{
     let myResponse = this._http
       .post(`${this.url_baseURL}${blogId}/delete${this.url_baseToken}`, '');
