@@ -91,6 +91,17 @@ export class BlogHttpService {
     }
   }*/
   
+  public createBlog(blogData):any{
+
+    let myResponse = this._http
+      .post(`${this.url_baseURL}create${this.url_baseToken}`, blogData);
+    
+    console.log(`${this.url_baseURL}create${this.url_baseToken}`)
+
+    console.log(myResponse);
+    
+    return myResponse;
+  }
 
   //Requests a json from the API using the api url, "currentDetail", and token. 
   public requestApiData(): Observable<any> {

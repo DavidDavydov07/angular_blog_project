@@ -37,17 +37,29 @@ export class BlogCreateComponent implements OnInit {
       
     }
 
+    console.log(blogData)
+
     this.BlogHttpService.createBlog(blogData).subscribe(
 
       data => {
-        this.postStatus = true;
-        setTimeout(() => {
-          this.router.navigate(['/blog', data.data.blogId])
-        }, 1000);
+        if(data.error === true){
+          this.postStatusError = true;
+          this.postStatus = false;
+        }
+
+        else{
+          this.postStatus = true;
+          this.postStatusError = false;
+          setTimeout(() => {
+            this.router.navigate(['/blog', data.data.blogId])
+          }, 1000);
+        }
+        console.log(data);
+
       },
 
       error => {
-        this.postStatus = false;
+        this.postStatusError = true;
       }
     )
 
