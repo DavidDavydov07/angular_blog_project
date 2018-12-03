@@ -6,3 +6,7 @@ h2 {
 p {
     margin-top: 1rem;
 }
+
+.customPadding {
+    padding-bottom: 0.8rem;
+}

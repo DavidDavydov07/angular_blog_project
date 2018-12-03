@@ -14,18 +14,24 @@ export class BlogViewComponent implements OnInit, OnDestroy {
   public currentBlog:object;
   public isLoaded:boolean;
 
+  public postStatus = false;
+  public postStatusError = false;
+
   constructor(private _route: ActivatedRoute, private router: Router, private BlogHttpService:BlogHttpService) {
     console.log("constructor is called");
 
    }
 
   async ngOnInit() {
+
     /*Set isLoaded to false so that this component's templating doesn't
     active prematurely before the data is called.
     
     This isn't a problem on the first component call but happens durring
     subsequent calls.*/ 
     this.isLoaded = false;
+    this.postStatus = false;
+    this.postStatusError = false;
 
     //getting the blog id from the route.
     await this.BlogHttpService.constructorBlogFunction();
@@ -46,6 +52,31 @@ export class BlogViewComponent implements OnInit, OnDestroy {
     })
 
     return await tempCurrentBlog;
+  }
+
+  deleteThisBlog(){
+    // @ts-ignore
+    this.BlogHttpService.deleteBlog(this.currentBlog.blogId).subscribe(
+
+      data => {
+        if(data.error === true){
+          this.postStatusError = true;
+          this.postStatus = false;
+        }
+
+        else{
+          this.postStatus = true;
+          this.postStatusError = false;
+          setTimeout(() => {
+            this.router.navigate(['/home'])
+          }, 1000);
+        }
+      },
+
+      error =>{
+
+      }
+    )
   }
 
   ngOnDestroy(){

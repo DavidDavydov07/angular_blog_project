@@ -95,11 +95,14 @@ export class BlogHttpService {
 
     let myResponse = this._http
       .post(`${this.url_baseURL}create${this.url_baseToken}`, blogData);
-    
-    console.log(`${this.url_baseURL}create${this.url_baseToken}`)
 
-    console.log(myResponse);
-    
+    return myResponse;
+  }
+
+  public deleteBlog(blogId):any{
+    let myResponse = this._http
+      .post(`${this.url_baseURL}${blogId}/delete${this.url_baseToken}`, '');
+
     return myResponse;
   }
 
@@ -117,7 +120,7 @@ export class BlogHttpService {
   //At the time of writing this is only called inside said component.
   public async constructorBlogFunction(){
     
-    //Only run all of this if there's something proceeding the blog (hopefully a blogID.)
+    //Only run all of this if there's something proceeding the blog (hopefully a blogId.)
     if(this.router.url.split("/").length > 2){
 
       let temp_json;
@@ -137,8 +140,8 @@ export class BlogHttpService {
       //Run through all the "blogs" in the temp-JSON variable .
       for(let blog of temp_json){
 
-        /*If the blogID proceeding the blog url file path matches 
-        the blogID of a actual blog, set the current detail to call that
+        /*If the blogId proceeding the blog url file path matches 
+        the blogId of a actual blog, set the current detail to call that
         specific blog from the API. 
         
         Also sets isAMatch to true and breaks the for loop.*/ 
@@ -159,7 +162,7 @@ export class BlogHttpService {
       }
     }
 
-    //If this blog has nothing proceding the "blog" route redirect to not found since the blog-view component isn't functional without a blogID.
+    //If this blog has nothing proceding the "blog" route redirect to not found since the blog-view component isn't functional without a blogId.
     else{ 
       this.router.navigate(['**']);
     }
