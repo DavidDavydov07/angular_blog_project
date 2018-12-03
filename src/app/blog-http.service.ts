@@ -27,7 +27,7 @@ export class BlogHttpService {
   private url_baseURL = `https://blogapp.edwisor.com/api/v1/blogs/`;
   private url_baseToken:string = `?authToken=NGExNzdiYjhjNDIzZmM4NmM0N2YzZWI0YWY3ZThlNDAyMjNjNTVjZDg0M2QxNjI5ZDU4OGU2ODc3ZDRjZDUwZmJmNGM1MDFkMGE2MGVlNDExMzcyODBiNTZhMjNiNzFhMjUzYjY3MjQ4M2Y2MDU3ZWZlODIzOTdjYzdhZThkYjE3YQ==`;
   
-  public currentLoadingPercent = 0;
+  public currentLoadingPercent = 100;
   //public currentBreadCrumbs = [];
 
   constructor(private _http:HttpClient, private _route: ActivatedRoute, private router: Router) { 

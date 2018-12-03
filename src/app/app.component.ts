@@ -8,7 +8,7 @@ import { BlogHttpService } from './blog-http.service';
 })
 export class AppComponent {
   title = 'Blog Application Demo';
-  public loadBarProgress = 0;
+  public loadBarProgress = 100;
   
   constructor(BlogHttpService:BlogHttpService){
 

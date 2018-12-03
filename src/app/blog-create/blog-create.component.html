@@ -1,8 +1,15 @@
 <div class="container">
+  <div [hidden]="postStatus != true" class="alert-success customPadding" style="margin-top: 0.8rem;">
+    Blog <strong>{{blogTitle}}</strong> posted <strong>successfully</strong>! You are being redirected...
+  </div>
+
+  <div [hidden]="postStatusError != true" class="alert alert-danger customPadding" style="margin-top: 0.8rem;">
+    There was an error posting your blog.
+  </div>
 
   <div class="row" style="text-align:left">
     <div class="col-md-12">
-      <form #createBlogForm="ngForm" (ngSubmit)="createBlog()">
+      <form #createBlogForm="ngForm" (ngSubmit)="createBlog()" style="margin-top: 0.8rem;">
 
         <div class="form-group">
 
@@ -12,37 +19,36 @@
             required>
 
         </div>
-        <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
-         Blog Title is required 
+        <div [hidden]="title.valid || title.pristine" class="customInvalid customPadding">
+          Blog Title is required
         </div>
 
-        <div class="form-group">
+        <div class="form-group customPadding">
           <label>Description</label>
-          <input type="text" name="blogDescription" [(ngModel)]="blogDescription" #description="ngModel" class="form-control" placeholder="Enter Description"
-            required>
+          <input type="text" name="blogDescription" [(ngModel)]="blogDescription" #description="ngModel" class="form-control"
+            placeholder="Enter Description" required>
         </div>
-        <div class="form-group">
+
+
+        <div class="form-group customPadding">
           <label>Enter the blog body</label>
-          <textarea name="blogBodyHtml" [(ngModel)]="blogBodyHtml" #bodyHtml="ngModel" class="form-control" rows="3" required></textarea>
+          <textarea name="blogBodyHtml" [(ngModel)]="blogBodyHtml" #bodyHtml="ngModel" class="form-control" rows="3"
+            required></textarea>
         </div>
-        <div class="form-group">
+
+
+        <div class="form-group customPadding">
           <label>Category</label>
-          <select [(ngModel)]="blogCategory" #category="ngModel" name="blogCategory" class="form-control" id="category" required>
-                <option *ngFor="let category of possibleCategories" [value]="category">{{category}}</option>
-              </select>
+          <select [(ngModel)]="blogCategory" #category="ngModel" name="blogCategory" class="custom-select form-control" id="category"
+            required>
+            <option *ngFor="let category of possibleCategories" [value]="category">{{category}}</option>
+          </select>
         </div>
 
-
-        <button type="submit" class="btn btn-default" [disabled]="!createBlogForm.form.valid">Post the blog</button>
+        <button type="submit" class="btn btn-primary customPadding" [disabled]="!createBlogForm.form.valid">Post the
+          blog</button>
       </form>
 
-      <div class="form-group">
-        <fieldset>
-          <label class="control-label" for="readOnlyInput">Readonly input</label>
-          <input class="form-control" id="readOnlyInput" type="text" placeholder="Readonly input here…" readonly="">
-        </fieldset>
-      </div>
-        
     </div>
 
   </div>
